@@ -51,9 +51,11 @@ public class Controller implements Initializable {
 
     private boolean authenticated;
     private String nickname;
+    private String newNickname;
 
     private Stage stage;
     private Stage regStage;
+    private Stage changeStage;
     private RegController regController;
 
     public void setAuthenticated(boolean authenticated) {
@@ -139,6 +141,12 @@ public class Controller implements Initializable {
                                         clientList.getItems().add(token[i]);
                                     }
                                 });
+                            }
+
+                            // Обновление ника
+                            if (str.startsWith("/changeNickname_ok")) {
+                                nickname = str.split("\\s+")[1];
+                                setAuthenticated(true);
                             }
                         } else {
                             textArea.appendText(str + "\n");
@@ -243,5 +251,47 @@ public class Controller implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void changeNickname(String login, String password, String nickname, String newNickname) {
+        if (socket == null || socket.isClosed()) {
+            connect();
+        }
+        String msg = String.format("/changeNickname %s %s %s %s", login, password, nickname, newNickname);
+        System.out.println(msg);
+        try {
+            out.writeUTF(msg);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void createChangeWindow() {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/changeNickName.fxml"));
+            Parent root = fxmlLoader.load();
+            changeStage = new Stage();
+            changeStage.setTitle("Open chat change nickName");
+            changeStage.setScene(new Scene(root, 400, 320));
+
+            changeStage.initModality(Modality.APPLICATION_MODAL);
+            changeStage.initStyle(StageStyle.UTILITY);
+
+            regController = fxmlLoader.getController();
+            regController.setController(this);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void tryToChange(ActionEvent actionEvent) {
+        System.out.println(222);
+        if (changeStage == null) {
+            createChangeWindow();
+        }
+        Platform.runLater(() -> {
+            changeStage.show();
+        });
     }
 }

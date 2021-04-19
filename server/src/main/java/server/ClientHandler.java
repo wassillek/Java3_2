@@ -91,6 +91,21 @@ public class ClientHandler {
                                 String[] token = str.split("\\s+", 3);
                                 server.privateMsg(this, token[1], token[2]);
                             }
+
+                            // Изменение ника
+                            if (str.startsWith("/changeNickname")) {
+                                String[] token = str.split("\\s+", 5);
+                                if (token.length < 5) {
+                                    continue;
+                                }
+                                boolean b = server.getAuthService()
+                                        .changeNick(token[1], token[2], token[3], token[4]);
+                                if (b) {
+                                    sendMsg("/changeNickname_ok " + token[4]);
+                                } else {
+                                    sendMsg("/changeNickname_no");
+                                }
+                            }
                         } else {
                             server.broadcastMsg(this, str);
                         }
