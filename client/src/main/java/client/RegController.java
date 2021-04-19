@@ -16,6 +16,8 @@ public class RegController {
     @FXML
     public TextField nickField;
     @FXML
+    public TextField newNickField;
+    @FXML
     private TextArea textArea;
 
     @FXML
@@ -37,5 +39,19 @@ public class RegController {
 
     public void setController(Controller controller) {
         this.controller = controller;
+    }
+
+    @FXML
+    public void tryToChange(ActionEvent actionEvent) {
+        System.out.println(111);
+        String login = loginField.getText().trim();
+        String password = passwordField.getText().trim();
+        String nickname = nickField.getText().trim();
+        String newNickname = newNickField.getText().trim();
+
+        System.out.println(nickname);
+        System.out.println(newNickname);
+
+        controller.changeNickname(login, password, nickname, newNickname);
     }
 }

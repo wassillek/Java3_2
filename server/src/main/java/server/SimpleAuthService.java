@@ -1,5 +1,6 @@
 package server;
 
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,5 +51,11 @@ public class SimpleAuthService implements AuthService{
         }
         users.add(new UserData(login, password, nickname));
         return true;
+    }
+
+    @Override
+    public boolean changeNick(String login, String password, String nickname, String newNickname) {
+
+        return false;
     }
 }
